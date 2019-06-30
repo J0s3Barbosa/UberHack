@@ -1,0 +1,9 @@
+<title><%- title  =  'Home' %></title>
+
+  <% if (typeof SuccessMsg != 'undefined') { %>
+    <div class="alert alert-success"><%= SuccessMsg %></div>
+    <% } else if(typeof ErrorMsg != 'undefined' ) { %>
+    <div class="alert alert-danger"><%= ErrorMsg %></div>
+    <% } %>
+
+   

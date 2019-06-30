@@ -1,0 +1,204 @@
+<title><%- title  =  'File Upload' %></title>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+
+    <% include ../partials/file_upload/uploadFileForm.ejs %>
+  </div>
+</div>
+
+<div class="panel panel-default ">
+    <div class="panel-body ">
+        <div id="myProgress">
+            <div id="myBar"></div>
+          </div>
+          
+        <h2>Files </h2> <button id="btnLoadData" class="btn btn-primary">Load Data</button>
+     
+      <div id="divLoadData"> </div>
+  
+    </div>
+  </div>
+
+
+<script>
+  window.onload = function () {
+    document.getElementById('formupload').onsubmit = function () {
+      return false
+    }
+  }
+
+  $(document).ready(function () {
+    loadData();
+
+    function loadData() {
+      var url = '/indexRouters/listoffiles'
+      $.get(url, function (data, status) {
+        if (status == "success") {
+          var txt = '';
+          txt += "<div class='table-responsive'>"
+          txt += "<table class='table table-hover '>"
+          txt += "<thead>"
+          txt += "<tr>"
+          txt += "<th>Files Downloaded</th>"
+          txt += "<th>Actions</th>"
+          txt += "</thead>"
+          txt += "</thead>"
+          txt += "<tbody>"
+          for (var i = 0; i < data.lstFiles.length; i++) {
+            txt += "<tr>"
+            txt +=
+              "<td><a  href='" +
+              data.lstFiles[i] +
+              "' target='_blank' >" +
+              data.lstFiles[i] + "</a></td>";
+
+              txt +=
+            "<td><button " +
+ "type='submit' onclick='deleteCheck(this);'  value='" +
+            data.lstFiles[i] +
+            "' data-id='" +
+            data.lstFiles[i] +
+            "' class='btn btn-danger'  '>Delete</button></td>";
+ 
+
+            txt += "</tr>";
+            txt += "</tr>"
+
+          }
+          txt += "</tbody>"
+          txt += "</table>"
+          txt += "</div>"
+          document.getElementById("divLoadData").innerHTML = txt;
+
+        }
+
+        if (status == "error")
+          alert("Error: " + status);
+      });
+
+    }
+
+    $("#btnLoadData").click(function () {
+      loadData();
+    });
+
+    $('#formupload').submit(function (e) {
+      move();
+      e.preventDefault();
+      var fd = new FormData($(this)[0]);
+      $.ajax({
+        url: '/indexRouters/fileupload',
+        data: fd,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function (data) {
+          document.getElementById("formupload").reset();
+          $("#btnLoadData").click();
+          var msg = "Data Updated successfully ";
+        var msg_type = "success";
+        ShowMessage(msg, msg_type);
+
+        },
+        error: function (request, status, error) {
+          var msg = request.responseText;
+        }
+
+
+      });
+
+    });
+
+  });
+  function ShowMessage(msg, msg_type) {
+    if (msg != "") {
+      var element = $("#successMessage");
+
+      if (msg_type == "success") {
+        element.addClass("alert success");
+      } else if (msg_type == "warning") {
+        element.addClass("alert warning");
+      } else if (msg_type == "error") {
+        element.addClass("alert");
+      } else if (msg_type == "info") {
+        element.addClass("alert info");
+      } else if (msg_type == "default") {
+      }
+      element.text(msg);
+      element.show();
+      $(window).scrollTop(0);
+    }
+
+    HideMessage();
+  }
+  function HideMessage() {
+    var element = $("#successMessage");
+    element.fadeIn("slow");
+    setTimeout(function () {
+      element.fadeOut("slow", function () { });
+      msg = "";
+      element.text(msg);
+      element.removeClass("alert");
+    }, 3000);
+  }
+
+  function deleteCheck( e) {
+    var file =  { file: e.value} 
+    console.log(file)
+      $.ajax({
+        url: '/indexRouters/clearFold',
+        data:file,
+        type: 'POST',
+        success: function (data) {
+          $("#btnLoadData").click();
+          var msg = "Data Updated successfully ";
+        var msg_type = "success";
+
+        },
+        error: function (request, status, error) {
+          var msg = request.responseText;
+        }
+
+      });
+  }
+
+  function move() {
+  var elem = document.getElementById("myBar"); 
+  elem.style.display= "block";
+  var width = 0;
+  var id = setInterval(frame, 10);
+  function frame() {
+    if (width >= 100) {
+      clearInterval(id);
+    } else {
+      width++; 
+      elem.style.width = width + '%'; 
+      elem.innerHTML = width * 1 + '%';
+
+    }
+    if(width == 100){
+      setTimeout(function(){ hideElement() }, 2000);
+    }
+
+  }
+  function hideElement() {
+      elem.style.display= "none";
+      width = 0;
+    }
+}
+
+</script>
+
+<style>
+#myBar {
+  width: 10%;
+  height: 30px;
+  background-color: #4CAF50;
+  text-align: center; /* To center it horizontally (if you want) */
+  line-height: 30px; /* To center it vertically */
+  color: white; 
+  display: none;
+}
+
+</style>
