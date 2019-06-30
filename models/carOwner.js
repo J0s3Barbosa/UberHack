@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
+
 const Schema = mongoose.Schema;
 
 var CarOwnerSchema = new Schema({
-
   
   Nome: {
     type: String,
@@ -38,9 +38,10 @@ var CarOwnerSchema = new Schema({
   DataDeCadastro: {
     type: Date,
     default: Date.now
+  },
+  NumeroCarteira: {
+    type: String,
   }
-  
-  
 });
 module.exports = mongoose.model("CarOwner", CarOwnerSchema);
  
