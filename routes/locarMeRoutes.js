@@ -3,7 +3,6 @@ var router = express.Router();
 
 var locarMeController = require('../controllers/locarMeController');
 
-// router.get('/locarme', (req, res) => res.render('pages/locarme'))
 
 router.get('/driver/cadastro' , locarMeController.driverCadastro);
 router.get('/driver/alugue' , locarMeController.driverAlugue);

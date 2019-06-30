@@ -21,7 +21,7 @@ exports.driverAlugue = function(req, res) {
 
 exports.CarOwnerCadastro = function(req, res) {
   try {
-    res.render("pages/carowner");
+    res.render("pages/carOwner");
   } catch (error) {
     console.log(error);
   }
