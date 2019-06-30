@@ -1,7 +1,7 @@
 var request = require("request");
 const querystring = require("querystring");
 const driver = require("../models/driver");
-const CarOwner = require("../models/carOwner");
+const CarOwner = require("../models/carowner");
 
 exports.driverCadastro = function(req, res) {
   try {
@@ -21,7 +21,7 @@ exports.driverAlugue = function(req, res) {
 
 exports.CarOwnerCadastro = function(req, res) {
   try {
-    res.render("pages/carOwner");
+    res.render("pages/carowner");
   } catch (error) {
     console.log(error);
   }
